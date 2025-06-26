@@ -1,49 +1,38 @@
-# Use this Blueprint to deploy n8n on Render as a web
-# service that uses a Postgres database to store
-# workflow data.
-#
-# This Blueprint uses free instance types (specified by
-# `plan`) for both the web service and the database. You
-# can upgrade to paid instance types at any time to
-# increase resources.
-
 services:
   - type: web
     plan: free
-    # This is the runtime for services that pull a prebuilt Docker image
     runtime: image
-    # You can give the service any name
     name: n8n-service
     image:
-      # Pulls the n8n image tagged as latest from Docker Hub
       url: docker.io/n8nio/n8n:latest
 
-    # All environment variables defined below are required!
-    #
-    # You can define additional environment variables as needed.
     envVars:
-      # Generates a base64-encoded key for
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
-    
+
       - key: DB_TYPE
         value: postgres
-    
+
       - key: DB_POSTGRESDB_DATABASE
-        value: postgres   # ou le nom exact depuis Supabase
+        value: postgres 
+
       - key: DB_POSTGRESDB_HOST
-        value: https://iibkjzmvuftcwlycxyqh.supabase.co     # ← Remplace par l’hôte exact Supabase
+        value: iibkjzmvuftcwlycxyqh.supabase.co  
+
       - key: DB_POSTGRESDB_PASSWORD
-        value: ${DB_PASSWORD}
+        value: ${DB_PASSWORD} 
+
       - key: DB_POSTGRESDB_USER
-        value: postgres            # ou autre si tu l’as modifié
-    
-      # IMPORTANT: Configure ton URL Render pour les webhooks
+        value: postgres
+
       - key: WEBHOOK_URL
-        value: https://n8n-xxxx.onrender.com  # ← à remplacer après déploiement
+        value: https://n8n-xxxx.onrender.com 
+
       - key: N8N_BASIC_AUTH_ACTIVE
         value: true
+
       - key: N8N_BASIC_AUTH_USER
         value: admin
+
       - key: N8N_BASIC_AUTH_PASSWORD
-        value: ton_mot_de_passe_admin
+        value: ${ADMIN_PASSWORD} 
